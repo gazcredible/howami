@@ -4,3 +4,13 @@ ui flow proto/Library/
 ui flow proto/Logs/
 
 .DS_Store
+
+apps/ui testbed/Library/
+
+apps/ui testbed/.vs/
+
+apps/ui testbed/builds/
+
+apps/ui testbed/Logs/
+
+apps/ui testbed/obj/
