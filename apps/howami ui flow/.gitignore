@@ -1,0 +1,22 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+Assets/AssetStoreTools*
+
+# Visual Studio cache directory
+.vs/
+
+GAM150/audio packages/
+
+ProcDungeonTest/ProcDungeonTest/bin/
+
+venv/
+
+.idea/
+
+Server - Copy/
+
+*.csproj
+*.sln
