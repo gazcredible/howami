@@ -16,6 +16,12 @@ public class UITestbed : MonoBehaviour
     {
         hamburgerMenuActive = false;
         mode = "splash";
+
+        transform.Find("ui_background").Find("splash").gameObject.SetActive(true);
+        transform.Find("ui_background").Find("new_response").gameObject.SetActive(false);
+        transform.Find("ui_background").Find("review_current").gameObject.SetActive(false);
+        transform.Find("ui_background").Find("review_historic").gameObject.SetActive(false);
+        transform.Find("ui_background").Find("support").gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -41,7 +47,7 @@ public class UITestbed : MonoBehaviour
             default:
                 Debug.LogError(mode + " not supported");
                 return;
-        }
+        } 
     }
 
     public void OnHamburgerToggle()
@@ -52,9 +58,14 @@ public class UITestbed : MonoBehaviour
     public void OnHamburgerSelect(String option)
     {
         if(option != mode)
-        {
-            //do something
+        {                        
+            transform.Find("ui_background").Find(mode).gameObject.SetActive(false);
+
             mode = option;
+
+            transform.Find("ui_background").Find(mode).gameObject.SetActive(true);
+
+            hamburgerMenuActive = false;
         }      
     }
 }

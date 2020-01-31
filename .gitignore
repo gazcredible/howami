@@ -14,3 +14,5 @@ apps/ui testbed/builds/
 apps/ui testbed/Logs/
 
 apps/ui testbed/obj/
+
+apps/ui testbed/Temp/
