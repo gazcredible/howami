@@ -8,6 +8,8 @@ public class UITestbed : MonoBehaviour
     // Start is called before the first frame update
 
     public Color textHighlight;
+    public Color textNormal;
+    public Color mouthNoirmal;
 
     public bool hamburgerMenuActive;
     public String mode;
@@ -66,6 +68,43 @@ public class UITestbed : MonoBehaviour
             transform.Find("ui_background").Find(mode).gameObject.SetActive(true);
 
             hamburgerMenuActive = false;
+
+            //on new page
+            switch (mode)
+            {
+                case "splash":
+                    break;
+
+                case "new_response":
+                    transform.Find("ui_background").Find(mode).GetComponent<ui_new_response>().OnPageSelected();
+                    break;
+
+                case "review_current":
+                    transform.Find("ui_background").Find(mode).GetComponent<ui_review_current>().OnPageSelected();
+                    break;
+
+                case "review_historic":
+                    transform.Find("ui_background").Find(mode).GetComponent<ui_review_historic>().OnPageSelected();
+                    break;
+
+                case "support":
+                    break;
+
+                default:
+                    Debug.LogError(mode + " not supported");
+                    return;
+            }
         }      
     }
 }
+
+/*
+Questions:
+Role: In the last month, have been clear about your role in the job?
+Demand: In the last month, in your work and personal life, how demanding has your situation been?
+Support: In the last month, how much support have you received in your work and personal life?
+Relationships: Have the relationships at work been positive?
+Control: in the last month, do you feel you have had enough say in how you do your work?
+Change: In the last month, have any changes to your work been well communicated to you?
+ 
+ */

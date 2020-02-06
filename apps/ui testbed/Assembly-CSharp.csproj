@@ -63,6 +63,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\ui_new_response.cs" />
+    <Compile Include="Assets\ui_review_current.cs" />
+    <Compile Include="Assets\ui_review_historic.cs" />
     <Compile Include="Assets\uiHamburger.cs" />
     <Compile Include="Assets\UITestbed.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
