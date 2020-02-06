@@ -88,6 +88,7 @@ public class UITestbed : MonoBehaviour
                     break;
 
                 case "support":
+                    transform.Find("ui_background").Find(mode).GetComponent<ui_support>().OnPageSelected();
                     break;
 
                 default:
