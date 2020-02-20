@@ -2,32 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class HowamiQuestion
-{
-    public string title;
-    public string detail;
 
-    public HowamiQuestion(string title, string detail)
-    {
-        this.title = title;
-        this.detail = detail;
-    }
-}
 
 public class ui_new_response : MonoBehaviour
-{
-    HowamiQuestion[] questions =
-    {
-          new HowamiQuestion("How am I in my role:", "In the last month, have I been clear about my role in the job?"),
-          new HowamiQuestion("How am I with the demands of life:", "In the last month, how demanding has my work and personal life been?"),
-          new HowamiQuestion("How am I with the support I receive:", "In the last month, how much support have I received in work and personal life?"),
-          new HowamiQuestion("How am I with my relationships:", "In the last month, have the relationships I hav e at work been positive?"),
-          new HowamiQuestion("How am I with the control I have:", "In the last month, do I feel I have had enough sat in how I do my work?"),
-          new HowamiQuestion("How am I with the change:", "In the last month, have any changes in my work been well communicated with me?"),
-    };
-
+{    
     int currentQuestion;
     bool doNarrative;
+
+    HowamiQuestion[] questions;
 
     public void OnPageSelected()
     {
@@ -35,6 +17,7 @@ public class ui_new_response : MonoBehaviour
         doNarrative = false;
 
         var cq = transform.Find("current-question");
+        questions = GameObject.Find("Canvas").GetComponent<UITestbed>().userData.questions;
 
         cq.gameObject.SetActive(true);
         cq.transform.Find("question-title").GetComponent<UnityEngine.UI.Text>().text = questions[currentQuestion].title;
@@ -65,7 +48,7 @@ public class ui_new_response : MonoBehaviour
         }
         else
         {
-            transform.Find("narrative").gameObject.SetActive(false);
+            transform.Find("narrative").gameObject.SetActive(false);            
 
             cq.gameObject.SetActive(true);
             cq.transform.Find("question-title").GetComponent<UnityEngine.UI.Text>().text = questions[currentQuestion].title;

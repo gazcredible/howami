@@ -14,6 +14,8 @@ public class UITestbed : MonoBehaviour
     public bool hamburgerMenuActive;
     public String mode;
 
+    public UserData userData;
+
     void Start()
     {
         hamburgerMenuActive = false;
@@ -24,6 +26,9 @@ public class UITestbed : MonoBehaviour
         transform.Find("ui_background").Find("review_current").gameObject.SetActive(false);
         transform.Find("ui_background").Find("review_historic").gameObject.SetActive(false);
         transform.Find("ui_background").Find("support").gameObject.SetActive(false);
+
+        userData = new UserData();
+        userData.Init();
     }
 
     // Update is called once per frame
@@ -49,7 +54,7 @@ public class UITestbed : MonoBehaviour
             default:
                 Debug.LogError(mode + " not supported");
                 return;
-        } 
+        }
     }
 
     public void OnHamburgerToggle()
