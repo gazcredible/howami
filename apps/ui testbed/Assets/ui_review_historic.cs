@@ -48,11 +48,16 @@ public class ui_review_historic : UIBase
         i = 0;
         foreach (var entry in historicResponses)
         {
-            transform.Find("historic-overview").Find("historic-overview-month (" + i + ")").gameObject.SetActive(true);
-            transform.Find("historic-overview").Find("historic-overview-month (" + i + ")").GetComponent<ui_historic_overview_month>()
-                .Set(this, entry);
+            if (entry.data.Count > 0)
+            {
+                transform.Find("historic-overview").Find("historic-overview-month (" + i + ")").gameObject
+                    .SetActive(true);
+                transform.Find("historic-overview").Find("historic-overview-month (" + i + ")")
+                    .GetComponent<ui_historic_overview_month>()
+                    .Set(this, entry);
 
-            i++;
+                i++;
+            }
         }
     }
 
