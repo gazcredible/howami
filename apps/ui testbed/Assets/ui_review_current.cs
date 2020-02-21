@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 
-public class ui_review_current : MonoBehaviour
+public class ui_review_current : UIBase
 {
     List<UserRecord> currentResponses;
     int currentResponseIndex;

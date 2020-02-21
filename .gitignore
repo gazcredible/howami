@@ -16,3 +16,11 @@ apps/ui testbed/Logs/
 apps/ui testbed/obj/
 
 apps/ui testbed/Temp/
+
+apps/MC Testbed/.idea/
+
+apps/MC Testbed/Test00/bin/
+
+apps/MC Testbed/Test00/obj/
+
+apps/ui testbed/.idea/

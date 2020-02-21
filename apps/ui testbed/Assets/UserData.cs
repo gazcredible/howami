@@ -42,6 +42,11 @@ public class UserRecord : IComparable<UserRecord>
 
     public Dictionary<String, Response> responses;
     public DateTime date;
+
+    public override string ToString()
+    {
+        return date.ToString();
+    }
 };
 
 
@@ -148,5 +153,46 @@ public class UserData
     {
         return
             dimension_performance_lookup[dimensionLabel][(int)(record.responses[dimensionLabel].response)];
+    }
+
+    public class HistoricData
+    {
+        public HistoricData()
+        {
+            time = DateTime.Now;
+            data = new List<UserRecord>();
+        }
+
+        public DateTime time;
+
+        public List<UserRecord> data;
+    };
+
+    public List<HistoricData> GetHistoricData(DateTime fromHere)
+    {
+        var testDate = fromHere;
+
+        var result = new List<HistoricData>();
+        
+        for (var month = 0; month < 6; month++)
+        {
+            var currentData = new HistoricData();
+            currentData.time = testDate;
+            result.Add(currentData);
+            
+            foreach (var kvp in data)
+            {
+                if ((kvp.Key.Year == testDate.Year) && (kvp.Key.Month == testDate.Month))
+                {
+                    currentData.data.Add(kvp.Value);
+                }
+            }
+            
+            currentData.data.Sort();
+            
+            testDate = testDate.AddMonths(-1);
+        }
+
+        return result;
     }
 };

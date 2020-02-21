@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 
-public class ui_new_response : MonoBehaviour
+public class ui_new_response : UIBase
 {    
     int currentQuestion;
     bool doNarrative;
