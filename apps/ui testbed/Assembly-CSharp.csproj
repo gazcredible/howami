@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Assets\ui_current_overview_item.cs" />
     <Compile Include="Assets\ui_historic_overview_month.cs" />
+    <Compile Include="Assets\ui_mouth_model.cs" />
     <Compile Include="Assets\ui_new_response.cs" />
     <Compile Include="Assets\ui_review_current.cs" />
     <Compile Include="Assets\ui_review_historic.cs" />

@@ -19,10 +19,17 @@ public class ui_review_month_responses : UIBase
     int dimensionDetailID;
 
     private UIBase callingObject;
+
+    private GameObject summaryMouth;
     
     void Start()
     {
-        
+        summaryMouth = Instantiate(Resources.Load("prefabs/mouth-model")) as GameObject;
+
+        summaryMouth.transform.parent = transform.Find("current-summary");
+        var rt = summaryMouth.transform.Find("Canvas").GetComponent<RectTransform>();
+        rt.localPosition = new UnityEngine.Vector3(540,960);
+        rt.localScale = new UnityEngine.Vector3(10, 10, 1);
     }
 
     private UserData.HistoricData data;
@@ -87,7 +94,11 @@ public class ui_review_month_responses : UIBase
                 var root = transform.Find("current-summary");
                 root.Find("average-label").GetComponent<UnityEngine.UI.Text>().text =
                     "My average for " + data.time.ToString("MMMM", CultureInfo.InvariantCulture) + " " + data.time.Year;
-            }
+                
+                root.Find("feedback-to-user").GetComponent<UnityEngine.UI.Text>().text = userData.GetMonthlyFeedback(data.time);
+
+                summaryMouth.GetComponent<ui_mouth_model>().SetMouth(userData.GetMonthlyFeedbackAsInt(data.time));
+                }
                 break;
 
             case Mode.Dimension_Summary:
@@ -103,7 +114,14 @@ public class ui_review_month_responses : UIBase
                 
                 root.Find("item").Find("dimension").GetComponent<UnityEngine.UI.Text>().text = label;
                 root.Find("item").Find("value").GetComponent<UnityEngine.UI.Text>().text = userData.GetQuestionResponse(data.data[currentResponseIndex], label);
-            }
+
+                //if review historic - only show feedback
+                root.Find("view-details").gameObject.SetActive(true);
+                root.Find("enter-details").gameObject.SetActive(false);
+
+                //work out what data to stick in there
+                root.Find("view-details").Find("Text").GetComponent<UnityEngine.UI.Text>().text = userData.GetQuestionResponseNarrative(data.data[currentResponseIndex], label);
+                }
                 break;
         }
 

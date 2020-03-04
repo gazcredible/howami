@@ -32,6 +32,7 @@ public class UserRecord : IComparable<UserRecord>
         {
             var v = Enum.GetValues(typeof(UserResponse));
             response = (UserResponse)v.GetValue(UserData.rand.Next(v.Length));
+            //response = UserResponse.worst;
 
             narrative = "";
         }
@@ -88,7 +89,11 @@ public class UserData
 
             foreach (var label in dimensionLabels)
             {
-                record.AddResponse(label, new UserRecord.Response());
+
+                var res = new UserRecord.Response();
+
+                res.narrative = date.ToString() + "\n" + label + "\n" + "Here's my narrative";
+                record.AddResponse(label, res);
             }
 
             data.Add(record.date, record);
@@ -139,6 +144,20 @@ public class UserData
         return dimensionLabels[i];
     }
 
+    public String[] monthlyFeedback =
+    {
+        //0 - worst
+        "worst - everything is terrible",
+        //1 - med worst
+        "med worst - everything is fairly terrible",
+        //2 - med
+        "med  - everything is ok",
+        //3 - med good
+        "med good  - everything is better than ok",
+        //4 - good
+        "good  - everything is good",
+    };
+
     public Dictionary<String, String[]> dimension_performance_lookup = new Dictionary<String, String[]>()
     {
         {"ROLE",            new String[]{"role_worst", "role_med_worst", "role_med", "role_med_good", "role_good" } },
@@ -151,8 +170,17 @@ public class UserData
 
     public string GetQuestionResponse(UserRecord record, String dimensionLabel)
     {
-        return
-            dimension_performance_lookup[dimensionLabel][(int)(record.responses[dimensionLabel].response)];
+        return dimension_performance_lookup[dimensionLabel][(int)(record.responses[dimensionLabel].response)];
+    }
+
+    public string GetQuestionResponseNarrative(UserRecord record, String dimensionLabel)
+    {
+        if (record.responses[dimensionLabel].narrative.Length > 0)
+        {
+            return record.responses[dimensionLabel].narrative;
+        }
+
+        return "No narrative entered";
     }
 
     public class HistoricData
@@ -194,5 +222,63 @@ public class UserData
         }
 
         return result;
+    }
+
+    public int GetScoreForMonth(DateTime time)
+    {
+        var data = GetCurrentRespones(time);
+        var score = 0;
+        var count = 0;
+        foreach (var item in data)
+        {
+            foreach (var kvp in item.responses)
+            {
+                score += (int) kvp.Value.response;
+
+                count++;
+            }
+        }
+
+        return (int) ((score / (float) count) + 0.5f);
+    }
+
+    public String GetMonthlyFeedback(DateTime time)
+    {
+        var data = GetCurrentRespones(time);
+
+        if (data.Count == 0)
+        {
+            return "No entries for this month - why are we here?";
+        }
+
+        var score = GetMonthlyFeedbackAsInt(time);
+
+        return "score is: " + score +"\n" + monthlyFeedback[score];
+    }
+
+    public int GetMonthlyFeedbackAsInt(DateTime time)
+    {
+        var data = GetCurrentRespones(time);
+
+        if (data.Count == 0)
+        {
+            return 0;
+        }
+
+        var score = 0;
+        var count = 0;
+        foreach (var item in data)
+        {
+            foreach (var kvp in item.responses)
+            {
+                score += (int)kvp.Value.response;
+
+                count++;
+            }
+        }
+
+        score = (int)((score / (float)count) + 0.5f);
+
+        return score;
     }
 };
