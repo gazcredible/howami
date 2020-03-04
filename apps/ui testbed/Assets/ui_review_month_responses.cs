@@ -169,12 +169,18 @@ public class ui_review_month_responses : UIBase
             return;
         }
 
+        if (context == "current-summary")
+        {
+            currentMode = Mode.Overview;
+            return;
+        }
+
         throw new Exception(context + " unhandled");
     }
 
     public void OnDetailedResults()
     {
-        
+        currentMode = Mode.Summary;
     }
     
     public void OnDimensionDetail(int i)
