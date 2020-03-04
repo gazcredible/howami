@@ -16,6 +16,7 @@ public class ui_historic_overview_month : UIBase
         summaryMouth = Instantiate(Resources.Load("prefabs/mouth-model")) as GameObject;
 
         summaryMouth.transform.parent = transform;
+        summaryMouth.transform.SetAsFirstSibling();
 
         summaryMouth.transform.localScale = new UnityEngine.Vector3(1, 1, 1);
         summaryMouth.transform.position = transform.position - new UnityEngine.Vector3(((1080/2)*1.6f)-50, ((1920/2)*1.6f)+50, 0);                              

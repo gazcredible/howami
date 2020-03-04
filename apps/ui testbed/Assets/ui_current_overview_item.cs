@@ -7,7 +7,23 @@ public class ui_current_overview_item : UIBase
 {
     private ui_review_month_responses command_parent;
     private int myIndex;
-    
+
+    private GameObject summaryMouth;
+
+    void Awake()
+    {
+        summaryMouth = Instantiate(Resources.Load("prefabs/mouth-model")) as GameObject;
+
+        summaryMouth.transform.parent = transform;
+        summaryMouth.transform.SetAsFirstSibling();
+
+        summaryMouth.transform.localScale = new UnityEngine.Vector3(1, 1, 1);
+        summaryMouth.transform.position = transform.position - new UnityEngine.Vector3(((1080 / 2) * 1.6f) - 50, ((1920 / 2) * 1.6f) - 20, 0);
+
+        //transform.Find("mouth").gameObject.SetActive(false);
+
+        summaryMouth.GetComponent<ui_mouth_model>().SetMouth(4);
+    }
 
     public void Setup(ui_review_month_responses obj, int i, String label, String val)
     {
