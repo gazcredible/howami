@@ -7,6 +7,8 @@ public class ui_current_overview_item : UIBase
 {
     private ui_review_month_responses command_parent;
     private int myIndex;
+    
+
     public void Setup(ui_review_month_responses obj, int i, String label, String val)
     {
         command_parent = obj;

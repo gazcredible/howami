@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-public enum UserResponse { worst=0, med_worst,med, med_good, good };
+public enum UserResponse { worst=0, med_worst=1,med=2, med_good=3, good=4 };
 
 
 public class UserRecord : IComparable<UserRecord>
@@ -32,7 +32,7 @@ public class UserRecord : IComparable<UserRecord>
         {
             var v = Enum.GetValues(typeof(UserResponse));
             response = (UserResponse)v.GetValue(UserData.rand.Next(v.Length));
-            //response = UserResponse.worst;
+            response = UserResponse.med;
 
             narrative = "";
         }
@@ -194,6 +194,30 @@ public class UserData
         public DateTime time;
 
         public List<UserRecord> data;
+
+        public int GetScore()
+        {
+            if (data.Count == 0)
+            {
+                return 0;
+            }
+
+            var score = 0;
+            var count = 0;
+            foreach (var item in data)
+            {
+                foreach (var kvp in item.responses)
+                {
+                    score += (int)kvp.Value.response;
+
+                    count++;
+                }
+            }
+
+            score = (int)((score / (float)count) + 0.5f);
+
+            return score;
+        }
     };
 
     public List<HistoricData> GetHistoricData(DateTime fromHere)
@@ -275,6 +299,53 @@ public class UserData
 
                 count++;
             }
+        }
+
+        score = (int)((score / (float)count) + 0.5f);
+
+        return score;
+    }
+
+    public int GetFeedbackAsInt(DateTime time)
+    {
+        var data = GetCurrentRespones(time);
+
+        if (data.Count == 0)
+        {
+            return 0;
+        }
+
+        var score = 0;
+        var count = 0;
+        foreach (var item in data)
+        {
+            foreach (var kvp in item.responses)
+            {
+                score += (int)kvp.Value.response;
+
+                count++;
+            }
+        }
+
+        score = (int)((score / (float)count) + 0.5f);
+
+        return score;
+    }
+
+    public int GetHistoricFeedbackAsInt(List<UserData.HistoricData> data)
+    {        
+        if (data.Count == 0)
+        {
+            return 0;
+        }
+
+        var score = 0;
+        var count = 0;
+        foreach (var item in data)
+        {
+            score += item.GetScore();
+
+            count++;
         }
 
         score = (int)((score / (float)count) + 0.5f);

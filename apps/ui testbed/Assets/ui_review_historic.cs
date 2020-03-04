@@ -59,6 +59,10 @@ public class ui_review_historic : UIBase
                 i++;
             }
         }
+
+        transform.Find("historic-overview").Find("historic-overview-month-average")
+            .GetComponent<ui_historic_overview_month>()
+            .Set(this, historicResponses);
     }
 
     private void Update()
