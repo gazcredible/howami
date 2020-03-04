@@ -40,6 +40,15 @@ public class ui_review_month_responses : UIBase
         currentMode = Mode.Overview;
         
         currentResponseIndex = 0;
+
+        transform.Find("current-overview").Find("back").gameObject.SetActive(callingObject.name == "ui_review_current");
+    }
+
+    bool writeData;
+
+    public void SetWriteData(bool writeData)
+    {
+        this.writeData = writeData;
     }
 
     // Update is called once per frame
@@ -67,6 +76,8 @@ public class ui_review_month_responses : UIBase
                     {
                         var label = userData.GetDimensionLabel(i);
 
+                        root.Find("current-overview-item (" + i + ")").gameObject.SetActive(true);
+
                         root.Find("current-overview-item (" + i + ")").GetComponent<ui_current_overview_item>()
                             .Setup(this
                                 , i
@@ -81,6 +92,13 @@ public class ui_review_month_responses : UIBase
                 }
                 else
                 {
+                    for (var i = 0; i < 6; i++)
+                    {
+                        var label = userData.GetDimensionLabel(i);
+
+                        root.Find("current-overview-item (" + i + ")").gameObject.SetActive(false);
+                    }
+
                     root.Find("record").GetComponent<UnityEngine.UI.Text>().text = "No Responses for current month";
                     root.Find("prev").gameObject.SetActive(false);
                     root.Find("next").gameObject.SetActive(false);
@@ -120,12 +138,18 @@ public class ui_review_month_responses : UIBase
                 root.Find("item").Find("value").GetComponent<UnityEngine.UI.Text>().text = userData.GetQuestionResponse(data.data[currentResponseIndex], label);
 
                 //if review historic - only show feedback
-                root.Find("view-details").gameObject.SetActive(true);
-                root.Find("enter-details").gameObject.SetActive(false);
 
-                //work out what data to stick in there
-                root.Find("view-details").Find("Text").GetComponent<UnityEngine.UI.Text>().text = userData.GetQuestionResponseNarrative(data.data[currentResponseIndex], label);
+                if (writeData == true)
+                {
+                    root.Find("enter-details").gameObject.SetActive(writeData);
+                    root.Find("enter-details").Find("InputField").GetComponent<UnityEngine.UI.InputField>().text = userData.GetQuestionResponseNarrative(data.data[currentResponseIndex], label);
                 }
+                else
+                {
+                    root.Find("view-details").gameObject.SetActive(!writeData);
+                    root.Find("view-details").Find("Text").GetComponent<UnityEngine.UI.Text>().text = userData.GetQuestionResponseNarrative(data.data[currentResponseIndex], label);
+                }
+            }
                 break;
         }
 

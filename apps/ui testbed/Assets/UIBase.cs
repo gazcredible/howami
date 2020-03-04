@@ -9,4 +9,8 @@ public class UIBase : MonoBehaviour
     {
         Debug.LogWarning("Implement me!");
     }
+
+    public virtual void OnPageSelected()
+    {
+    }
 }

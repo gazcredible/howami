@@ -98,7 +98,7 @@ public class UserData
 
             data.Add(record.date, record);
 
-            date = date.AddDays(UserData.rand.Next(3, 14));
+            date = date.AddDays(UserData.rand.Next(2, 4));
 
             date = date.AddHours(UserData.rand.Next(3, 14));
         }
@@ -220,13 +220,13 @@ public class UserData
         }
     };
 
-    public List<HistoricData> GetHistoricData(DateTime fromHere)
+    public List<HistoricData> GetHistoricData(DateTime fromHere, int months=6)
     {
         var testDate = fromHere;
 
         var result = new List<HistoricData>();
         
-        for (var month = 0; month < 6; month++)
+        for (var month = 0; month < months; month++)
         {
             var currentData = new HistoricData();
             currentData.time = testDate;

@@ -5,32 +5,39 @@ using UnityEngine;
 
 public class ui_review_historic : UIBase
 {
-    private DateTime currentTime;
-    private List<UserData.HistoricData> historicResponses;
+    //historic-overview -> howami for 6 months
+    //historic-summary -> average for 6 months
+
+    protected DateTime currentTime;
+    List<UserData.HistoricData> historicResponses;
 
     public UnityEngine.GameObject reviewCurrent;
 
-    enum Mode
+    protected enum Mode
     {
         Overview,
         Detail,
         Summary
     };
 
-    private Mode currentMode;
+    protected Mode currentMode;
 
-    void Awake()
+    public void Init()
     {
         reviewCurrent = Instantiate(Resources.Load("prefabs/review_month_responses")) as GameObject;
 
         reviewCurrent.transform.parent = transform;
         var rt = reviewCurrent.GetComponent<RectTransform>();
         rt.localPosition = UnityEngine.Vector3.zero;
-        
-        reviewCurrent.SetActive(false);
 
+        reviewCurrent.SetActive(false);
     }
-    public void OnPageSelected()
+
+    void Awake()
+    {
+        Init();
+    }
+    public override void OnPageSelected()
     {
         currentMode = Mode.Overview;
 
@@ -65,7 +72,7 @@ public class ui_review_historic : UIBase
             .Set(this, historicResponses);
     }
 
-    private void Update()
+    void Update()
     {
         switch (currentMode)
         {
@@ -107,6 +114,7 @@ public class ui_review_historic : UIBase
     public void OnHistoricDetail(UIBase callingObject, UserData.HistoricData data)
     {
         reviewCurrent.GetComponent<ui_review_month_responses>().SetData(callingObject, data);
+        reviewCurrent.GetComponent<ui_review_month_responses>().SetWriteData(false);
         currentMode = Mode.Detail;
     }
     

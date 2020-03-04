@@ -4,106 +4,36 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 
-public class ui_review_current : UIBase
+public class ui_review_current : ui_review_historic
 {
-    List<UserRecord> currentResponses;
-    int currentResponseIndex;
+    /*
+     * how am i this month by dimension (current overview) -> notes (dimension-summary)
+     * how am i overview / summary (current-summary)
+     */
 
-    DateTime currentTime;
-    void Start()
+    void Awake()
     {
-        
+        Init();
+
+        var rt = reviewCurrent.GetComponent<RectTransform>();
+        rt.localScale = new Vector3(1,1,1);
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnPageSelected()
     {
-        var root = transform.Find("current-overview");
+        currentMode = Mode.Overview;
 
-        if ( (currentResponses != null) && (currentResponses.Count > 0))
-        {
-            root.Find("record").GetComponent<UnityEngine.UI.Text>().text = "Record " + (currentResponseIndex + 1) + " of " + currentResponses.Count + "\n"
-                + currentResponses[currentResponseIndex].date.ToString();
-
-
-            var userData = GameObject.Find("Canvas").GetComponent<UITestbed>().userData;
-
-            
-            for (var i=0;i<6;i++)
-            {
-                var label = userData.GetDimensionLabel(i);
-
-                root.Find("item (" + i + ")").Find("dimension").GetComponent<UnityEngine.UI.Text>().text = label;
-                root.Find("item (" + i + ")").Find("value").GetComponent<UnityEngine.UI.Text>().text = userData.GetQuestionResponse(currentResponses[currentResponseIndex], label );
-            }
-
-            root.Find("prev").gameObject.SetActive(currentResponseIndex != 0);
-            root.Find("next").gameObject.SetActive(currentResponseIndex + 1 < currentResponses.Count);
-        }
-        else
-        {
-            root.Find("record").GetComponent<UnityEngine.UI.Text>().text = "No Responses for current month";
-            root.Find("prev").gameObject.SetActive(false);
-            root.Find("next").gameObject.SetActive(false);
-        }
-
-
-        root = transform.Find("current-summary");
-        root.Find("average-label").GetComponent<UnityEngine.UI.Text>().text = "My average for " + currentTime.ToString("MMMM", CultureInfo.InvariantCulture) +" " + currentTime.Year;
-    }
-
-    public void OnPageSelected()
-    {
         currentTime = DateTime.Now;
 
-        transform.Find("current-overview").gameObject.SetActive(true);
-        transform.Find("dimension-summary").gameObject.SetActive(false);
-        transform.Find("current-summary").gameObject.SetActive(false);
+        reviewCurrent.SetActive(true);
 
-        //how many responses are there for the current month
-        currentResponses = GameObject.Find("Canvas").GetComponent<UITestbed>().userData.GetCurrentRespones(currentTime);
-        currentResponseIndex = 0;
+        var historicResponses = GameObject.Find("Canvas").GetComponent<UITestbed>().userData.GetHistoricData(currentTime,1);
+
+        reviewCurrent.GetComponent<ui_review_month_responses>().SetData(this, historicResponses[0]);
+        reviewCurrent.GetComponent<ui_review_month_responses>().SetWriteData(true);
     }
 
-    public void OnNotes(string dimension)
-    {
-        transform.Find("current-overview").gameObject.SetActive(false);
-        transform.Find("dimension-summary").gameObject.SetActive(true);
-        transform.Find("current-summary").gameObject.SetActive(false);
-    }
-
-    public void OnCurrentSummary()
-    {
-        transform.Find("current-overview").gameObject.SetActive(false);
-        transform.Find("dimension-summary").gameObject.SetActive(false);
-        transform.Find("current-summary").gameObject.SetActive(true);
-    }
-
-    public void OnNotesBack()
-    {
-        OnPageSelected();
-    }
-
-    public void OnMainMenu()
-    {
-        GameObject.Find("Canvas").GetComponent<UITestbed>().OnHamburgerSelect("splash");
-    }
-
-    public void OnNext()
-    {
-        if (currentResponseIndex + 1 < currentResponses.Count)
-        {
-            currentResponseIndex++;
-            
-        }        
-    }
-
-    public void OnPrev()
-    {
-        
-        if (currentResponseIndex > 0)
-        {
-            currentResponseIndex--;
-        }        
+    void Update()
+    {      
     }
 }
