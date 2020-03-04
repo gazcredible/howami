@@ -30,6 +30,9 @@ public class ui_review_historic : UIBase
         var rt = reviewCurrent.GetComponent<RectTransform>();
         rt.localPosition = UnityEngine.Vector3.zero;
 
+        rt = reviewCurrent.GetComponent<RectTransform>();
+        rt.localScale = new Vector3(1, 1, 1);
+
         reviewCurrent.SetActive(false);
     }
 

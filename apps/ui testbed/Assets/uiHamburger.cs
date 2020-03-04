@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class uiHamburger : MonoBehaviour
 {
-    // Start is called before the first frame update
+    void Awake()
+    {
+        if (Application.platform == RuntimePlatform.WindowsPlayer)
+        {
+            Screen.SetResolution(340, 640, false);
+        }
+    }
+
     void Start()
     {
         
