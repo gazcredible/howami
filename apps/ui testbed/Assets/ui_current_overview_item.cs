@@ -25,13 +25,18 @@ public class ui_current_overview_item : UIBase
         summaryMouth.GetComponent<ui_mouth_model>().SetMouth(4);
     }
 
-    public void Setup(ui_review_month_responses obj, int i, String label, String val)
+    public void Setup(ui_review_month_responses obj, int i, String label, String val, UserResponse response)
     {
         command_parent = obj;
         myIndex = i;
         
         transform.Find("dimension").GetComponent<UnityEngine.UI.Text>().text = label;
         transform.Find("value").GetComponent<UnityEngine.UI.Text>().text = val;
+
+        if (summaryMouth != null)
+        {
+            summaryMouth.GetComponent<ui_mouth_model>().SetMouth((int)response);
+        }
     }
 
     public void OnSelected()

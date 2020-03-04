@@ -32,7 +32,7 @@ public class UserRecord : IComparable<UserRecord>
         {
             var v = Enum.GetValues(typeof(UserResponse));
             response = (UserResponse)v.GetValue(UserData.rand.Next(v.Length));
-            response = UserResponse.med;
+            //response = UserResponse.med;
 
             narrative = "";
         }

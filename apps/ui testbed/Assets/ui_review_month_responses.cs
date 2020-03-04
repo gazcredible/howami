@@ -68,8 +68,12 @@ public class ui_review_month_responses : UIBase
                         var label = userData.GetDimensionLabel(i);
 
                         root.Find("current-overview-item (" + i + ")").GetComponent<ui_current_overview_item>()
-                            .Setup(this, i, label,
-                                userData.GetQuestionResponse(data.data[currentResponseIndex], label));
+                            .Setup(this
+                                , i
+                                , label
+                                , userData.GetQuestionResponse(data.data[currentResponseIndex], label)
+                                , data.data[currentResponseIndex].responses[label].response
+                                );
                     }
 
                     root.Find("prev").gameObject.SetActive(currentResponseIndex != 0);

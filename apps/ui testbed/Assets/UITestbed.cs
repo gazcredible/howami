@@ -64,7 +64,7 @@ public class UITestbed : MonoBehaviour
 
     public void OnHamburgerSelect(String option)
     {
-        if(option != mode)
+       // if(option != mode)
         {                        
             transform.Find("ui_background").Find(mode).gameObject.SetActive(false);
 
