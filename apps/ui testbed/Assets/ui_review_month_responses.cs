@@ -80,7 +80,9 @@ public class ui_review_month_responses : UIBase
                         "Record " + (currentResponseIndex + 1) + " of " + data.data.Count + "\n"
                         + data.data[currentResponseIndex].date.ToString();
 
-                    for (var i = 0; i < 6; i++)
+                    var i = 0;
+
+                    foreach (UserData.Dimensions dimension in Enum.GetValues(typeof(UserData.Dimensions)))
                     {
                         var label = userData.GetDimensionLabel(i);
 
@@ -90,9 +92,11 @@ public class ui_review_month_responses : UIBase
                             .Setup(this
                                 , i
                                 , label
-                                , userData.GetQuestionResponse(data.data[currentResponseIndex], label)
-                                , data.data[currentResponseIndex].responses[label].response
+                                , userData.GetQuestionResponse(data.data[currentResponseIndex], dimension)
+                                , data.data[currentResponseIndex].responses[dimension].response
                                 );
+
+                        i++;
                     }
 
                     root.Find("prev").gameObject.SetActive(currentResponseIndex != 0);
@@ -143,7 +147,7 @@ public class ui_review_month_responses : UIBase
                 var label = userData.GetDimensionLabel(dimensionDetailID);
                 
                 root.Find("item").Find("dimension").GetComponent<UnityEngine.UI.Text>().text = label;
-                root.Find("item").Find("value").GetComponent<UnityEngine.UI.Text>().text = userData.GetQuestionResponse(data.data[currentResponseIndex], label);
+                root.Find("item").Find("value").GetComponent<UnityEngine.UI.Text>().text = userData.GetQuestionResponse(data.data[currentResponseIndex], (UserData.Dimensions)dimensionDetailID);
 
                     //if review historic - only show feedback
                 root.Find("enter-details").gameObject.SetActive(writeData);
@@ -155,11 +159,11 @@ public class ui_review_month_responses : UIBase
                 if (writeData == true)
                 {
                     
-                    root.Find("enter-details").Find("InputField").GetComponent<UnityEngine.UI.InputField>().text = userData.GetQuestionResponseNarrative(data.data[currentResponseIndex], label);
+                    root.Find("enter-details").Find("InputField").GetComponent<UnityEngine.UI.InputField>().text = userData.GetQuestionResponseNarrative(data.data[currentResponseIndex], (UserData.Dimensions)dimensionDetailID);
                 }
                 else
                 {                
-                    root.Find("view-details").Find("Text").GetComponent<UnityEngine.UI.Text>().text = userData.GetQuestionResponseNarrative(data.data[currentResponseIndex], label);
+                    root.Find("view-details").Find("Text").GetComponent<UnityEngine.UI.Text>().text = userData.GetQuestionResponseNarrative(data.data[currentResponseIndex], (UserData.Dimensions)dimensionDetailID);
                 }
             }
                 break;

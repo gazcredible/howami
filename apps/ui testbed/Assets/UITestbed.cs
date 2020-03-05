@@ -30,7 +30,9 @@ public class UITestbed : MonoBehaviour
         transform.Find("ui_hamburger").gameObject.SetActive(true);
 
         userData = new UserData();
-        userData.Init();
+        //userData.Init();
+        //userData.Save();
+        userData.Load();
     }
 
     // Update is called once per frame

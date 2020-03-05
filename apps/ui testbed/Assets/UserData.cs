@@ -2,16 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+
+using UnityEngine;
 
 public enum UserResponse { worst=0, med_worst=1,med=2, med_good=3, good=4};
 
-
+[Serializable]
 public class UserRecord : IComparable<UserRecord>
 {
     public UserRecord(DateTime date)
     {
         this.date = date;
-        this.responses = new Dictionary<string, Response>();        
+        this.responses = new Dictionary<UserData.Dimensions, Response>();        
+    }
+
+    public String DumpText()
+    {
+        var str = "";
+
+        foreach ( var kvp in this.responses)
+        {
+            str += kvp.Key + " " + kvp.Value.DumpText();
+            str += "\n";
+        }
+
+        return str;
     }
 
     public int CompareTo(UserRecord obj)
@@ -22,11 +40,12 @@ public class UserRecord : IComparable<UserRecord>
         return date.CompareTo( (obj as UserRecord).date);
     }
 
-    public void AddResponse(String dimension, Response response)
+    public void AddResponse(UserData.Dimensions dimension, Response response)
     {
         this.responses.Add(dimension, response);
     }
 
+    [Serializable]
     public class Response
     {
         public Response()
@@ -38,11 +57,16 @@ public class UserRecord : IComparable<UserRecord>
             narrative = "";
         }
 
+        public String DumpText()
+        {
+            return "response="+response + " narrative=" + narrative;
+        }
+
         public UserResponse response;
         public String narrative;
     }
 
-    public Dictionary<String, Response> responses;
+    public Dictionary<UserData.Dimensions, Response> responses;
     public DateTime date;
 
     public override string ToString()
@@ -64,10 +88,10 @@ public class HowamiQuestion
     }
 }
 
-
+[Serializable]
 public class UserData
 {
-    public static Random rand = new Random(0);
+    public static System.Random rand = new System.Random(0);
 
     public Dictionary<DateTime, UserRecord> data;
 
@@ -88,9 +112,9 @@ public class UserData
         {                 
             var record = new UserRecord(date);
 
-            foreach (var label in dimensionLabels)
+            //foreach (var label in dimensionLabels)   
+            foreach (UserData.Dimensions label in Enum.GetValues(typeof(Dimensions)))
             {
-
                 var res = new UserRecord.Response();
 
                 res.narrative = date.ToString() + "\n" + label + "\n" + "Here's my narrative";
@@ -138,6 +162,16 @@ public class UserData
           new HowamiQuestion("How am I with the change:", "In the last month, have any changes in my work been well communicated with me?"),
     };
 
+    public enum Dimensions
+    {
+        Role,
+        Demands,
+        Support,
+        Relationships,
+        Control,
+        Change
+    };
+
     public string[] dimensionLabels = { "ROLE", "DEMANDS", "SUPPORT", "RELATIONSHIPS", "CONTROL", "CHANGE" };
 
     public string GetDimensionLabel(int i)
@@ -159,22 +193,22 @@ public class UserData
         "good  - everything is good",
     };
 
-    public Dictionary<String, String[]> dimension_performance_lookup = new Dictionary<String, String[]>()
+    public Dictionary<Dimensions, String[]> dimension_performance_lookup = new Dictionary<Dimensions, String[]>()
     {
-        {"ROLE",            new String[]{"role_worst", "role_med_worst", "role_med", "role_med_good", "role_good" } },
-        {"DEMANDS",         new String[]{"demands_worst", "demands_med_worst", "demands_med", "demands_med_good", "demands_good" } },
-        {"SUPPORT",         new String[]{"support_worst", "support_med_worst", "support_med", "support_med_good", "support_good" } },
-        {"RELATIONSHIPS",   new String[]{"rel_worst", "rel_med_worst", "rel_med", "rel_med_good", "rel_good" } },
-        {"CONTROL",         new String[]{"control_worst", "control_med_worst", "control_med", "control_med_good", "control_good" } },
-        {"CHANGE",          new String[]{"change_worst", "change_med_worst", "change_med", "change_med_good", "change_good" } }, 
+        {Dimensions.Role,            new String[]{"role_worst", "role_med_worst", "role_med", "role_med_good", "role_good" } },
+        {Dimensions.Demands,         new String[]{"demands_worst", "demands_med_worst", "demands_med", "demands_med_good", "demands_good" } },
+        {Dimensions.Support,         new String[]{"support_worst", "support_med_worst", "support_med", "support_med_good", "support_good" } },
+        {Dimensions.Relationships,   new String[]{"rel_worst", "rel_med_worst", "rel_med", "rel_med_good", "rel_good" } },
+        {Dimensions.Control,         new String[]{"control_worst", "control_med_worst", "control_med", "control_med_good", "control_good" } },
+        {Dimensions.Change,          new String[]{"change_worst", "change_med_worst", "change_med", "change_med_good", "change_good" } }, 
      };
-
-    public string GetQuestionResponse(UserRecord record, String dimensionLabel)
+    
+    public string GetQuestionResponse(UserRecord record, Dimensions dimensionLabel)
     {
         return dimension_performance_lookup[dimensionLabel][(int)(record.responses[dimensionLabel].response)];
     }
 
-    public string GetQuestionResponseNarrative(UserRecord record, String dimensionLabel)
+    public string GetQuestionResponseNarrative(UserRecord record, Dimensions dimensionLabel)
     {
         if (record.responses[dimensionLabel].narrative.Length > 0)
         {
@@ -396,5 +430,91 @@ public class UserData
         score = (int)((score / (float)count) + 0.5f);
 
         return score;
+    }
+
+    public void Save()
+    {
+        if (true)
+        {
+            var filename = Application.persistentDataPath + "/playerInfo.dat";
+            
+            if (File.Exists(filename) == true)
+            {
+                File.Delete(filename);
+            }
+
+            var file = File.Create(filename);
+
+            try
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(file, data);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning("PersistentData - can't write to file:" + filename +"\n" +ex);
+            }
+
+            file.Close();
+            Debug.LogWarning("PersistentData - written:" + filename);
+        }
+
+        if (true)
+        {
+            var filename = Application.persistentDataPath + "/drdata.txt";
+
+            if (File.Exists(filename) == true)
+            {
+                File.Delete(filename);
+            }
+            var writer = File.CreateText(filename);
+
+            try
+            {
+                foreach (var entry in data)
+                {
+                    writer.Write(entry.Key);
+                    writer.Write(" ");
+                    writer.Write(entry.Value.DumpText().Replace('\n',' '));                    
+                    writer.Write(writer.NewLine);
+                }
+            }
+            catch (Exception)
+            {
+                Debug.LogWarning("PersistentData - can't write to file:" + filename);
+            }
+
+            writer.Close();
+            Debug.LogWarning("PersistentData - written:"+filename);
+        }
+    }
+
+    public void Load()
+    {
+        data = null;
+
+        var filename = Application.persistentDataPath + "/playerInfo.dat";
+
+        if (File.Exists(filename) == true)
+        {
+            var stream = File.Open(filename, FileMode.Open);
+            try
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                data = bf.Deserialize(stream) as Dictionary<DateTime, UserRecord>;
+
+                Debug.LogWarning("PersistentData - loaded:" + filename);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning("PersistentData - is out of date");
+                data = null;
+
+                Debug.LogWarning("PersistentData - can't load:" + filename +"\n"+ex);
+            }
+
+            stream.Close();
+        }
+
     }
 };
