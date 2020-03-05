@@ -9,10 +9,13 @@ public class ui_historic_overview_month : UIBase
 {
     private UserData.HistoricData data;
 
-    private GameObject summaryMouth;
+    //private GameObject summaryMouth;
 
-    void Awake()
+    private ui_mouth_model summaryMouth;
+
+    void Start()
     {
+        /*
         summaryMouth = Instantiate(Resources.Load("prefabs/mouth-model")) as GameObject;
 
         summaryMouth.transform.parent = transform;
@@ -20,12 +23,22 @@ public class ui_historic_overview_month : UIBase
 
         summaryMouth.transform.localScale = new UnityEngine.Vector3(1, 1, 1);
         summaryMouth.transform.position = transform.position - new UnityEngine.Vector3(((1080/2)*1.6f)-50, ((1920/2)*1.6f)+50, 0);                              
-
+        */
         //transform.Find("mouth").gameObject.SetActive(false);
+
+        if (transform.Find("mouth_model") != null)
+        {
+            summaryMouth = transform.Find("mouth_model").GetComponent<ui_mouth_model>();
+        }
     }
 
 
     private UIBase callingObject;
+
+    public void Set(UIBase callingObject, KeyValuePair<UserResponse, int>[] pieChart)
+    {
+        SetMouth( (int)pieChart[0].Key);
+    }
     public void Set(UIBase callingObject, UserData.HistoricData data)
     {
         this.callingObject = callingObject;
@@ -33,7 +46,7 @@ public class ui_historic_overview_month : UIBase
 
         if (summaryMouth == null)
         {
-            return;
+            Start();
         }
 
         if (data != null)
@@ -55,7 +68,7 @@ public class ui_historic_overview_month : UIBase
             return;
         }
 
-        summaryMouth.GetComponent<ui_mouth_model>().SetMouth(i);
+        summaryMouth.SetMouth(i);
     }
 
     public void Set(UIBase callingObject, List<UserData.HistoricData> data)
@@ -67,6 +80,10 @@ public class ui_historic_overview_month : UIBase
 
     public void OnDetail()
     {
-        GameObject.Find("review_historic").GetComponent<ui_review_historic>().OnHistoricDetail(callingObject, data);
+        //currently, historic average is not set up - need to do this
+        if (callingObject != null)
+        {
+            GameObject.Find("review_historic").GetComponent<ui_review_historic>().OnHistoricDetail(callingObject, data);
+        }
     }
 }

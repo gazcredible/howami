@@ -11,7 +11,7 @@ public class ui_new_response : UIBase
 
     HowamiQuestion[] questions;
 
-    public void OnPageSelected()
+    public override void OnPageSelected()
     {
         currentQuestion = 0;
         doNarrative = false;

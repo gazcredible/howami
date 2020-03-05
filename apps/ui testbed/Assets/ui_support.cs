@@ -15,12 +15,7 @@ public class ui_support : UIBase
     {
 
     }
-
-    public void OnPageSelected()
-    {
-
-    }
-
+    
     public void OnLaunchSite()
     {
         Application.OpenURL("http://unity3d.com/");

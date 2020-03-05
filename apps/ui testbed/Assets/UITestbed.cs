@@ -27,6 +27,8 @@ public class UITestbed : MonoBehaviour
         transform.Find("ui_background").Find("review_historic").gameObject.SetActive(false);
         transform.Find("ui_background").Find("support").gameObject.SetActive(false);
 
+        transform.Find("ui_hamburger").gameObject.SetActive(true);
+
         userData = new UserData();
         userData.Init();
     }

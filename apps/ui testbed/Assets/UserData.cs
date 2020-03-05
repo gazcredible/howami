@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
-public enum UserResponse { worst=0, med_worst=1,med=2, med_good=3, good=4 };
+public enum UserResponse { worst=0, med_worst=1,med=2, med_good=3, good=4};
 
 
 public class UserRecord : IComparable<UserRecord>
@@ -66,7 +67,7 @@ public class HowamiQuestion
 
 public class UserData
 {
-    public static Random rand = new Random();
+    public static Random rand = new Random(0);
 
     public Dictionary<DateTime, UserRecord> data;
 
@@ -246,6 +247,50 @@ public class UserData
         }
 
         return result;
+    }
+
+    public KeyValuePair<UserResponse, int>[] SummariseData(List<HistoricData> historicResponses)
+    {
+        var lookup = new Dictionary<UserResponse, int>();
+
+        foreach (var month in historicResponses)
+        {
+            foreach (var entry in month.data)
+            {
+                foreach (var response in entry.responses)
+                {
+                    if (lookup.ContainsKey(response.Value.response) == false)
+                    {
+                        lookup.Add(response.Value.response,1);
+                    }
+                    else
+                    {
+                        lookup[response.Value.response]++;
+                    }
+                }
+            }
+        }
+
+        var instances = new int[5];
+        var sum = 0;
+        foreach (var kvp in lookup)
+        {
+            instances[(int) kvp.Key] = kvp.Value;
+
+            sum += kvp.Value;
+        }
+
+        var percent = new KeyValuePair<UserResponse,int>[5];
+
+        for (var i = 0; i < percent.Length; i++)
+        {
+            percent[i] = new KeyValuePair<UserResponse, int>( (UserResponse) i,(instances[i] * 100) / sum);
+        }
+
+        Array.Sort(percent, new Comparison<KeyValuePair<UserResponse, int>>(
+            (i1, i2) => i2.Value.CompareTo(i1.Value)));
+        
+        return percent;
     }
 
     public int GetScoreForMonth(DateTime time)

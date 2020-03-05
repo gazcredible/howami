@@ -10,8 +10,9 @@ public class ui_review_historic : UIBase
 
     protected DateTime currentTime;
     List<UserData.HistoricData> historicResponses;
+    private KeyValuePair<UserResponse, int>[] historicPieChart;
 
-    public UnityEngine.GameObject reviewCurrent;
+    protected UnityEngine.GameObject reviewCurrent;
 
     protected enum Mode
     {
@@ -24,9 +25,10 @@ public class ui_review_historic : UIBase
 
     public void Init()
     {
+        
         reviewCurrent = Instantiate(Resources.Load("prefabs/review_month_responses")) as GameObject;
 
-        reviewCurrent.transform.parent = transform;
+        reviewCurrent.transform.SetParent(transform);
         var rt = reviewCurrent.GetComponent<RectTransform>();
         rt.localPosition = UnityEngine.Vector3.zero;
 
@@ -34,6 +36,7 @@ public class ui_review_historic : UIBase
         rt.localScale = new Vector3(1, 1, 1);
 
         reviewCurrent.SetActive(false);
+        
     }
 
     void Awake()
@@ -47,32 +50,15 @@ public class ui_review_historic : UIBase
         currentTime = DateTime.Now;
         
         historicResponses = GameObject.Find("Canvas").GetComponent<UITestbed>().userData.GetHistoricData(currentTime);
+        historicPieChart = GameObject.Find("Canvas").GetComponent<UITestbed>().userData.SummariseData(historicResponses);
+
 
         var i = 0;
         
         for (i = 0; i < 6; i++)
         {
             transform.Find("historic-overview").Find("historic-overview-month (" + i + ")").gameObject.SetActive(false);
-        }
-
-        i = 0;
-        foreach (var entry in historicResponses)
-        {
-            if (entry.data.Count > 0)
-            {
-                transform.Find("historic-overview").Find("historic-overview-month (" + i + ")").gameObject
-                    .SetActive(true);
-                transform.Find("historic-overview").Find("historic-overview-month (" + i + ")")
-                    .GetComponent<ui_historic_overview_month>()
-                    .Set(this, entry);
-
-                i++;
-            }
-        }
-
-        transform.Find("historic-overview").Find("historic-overview-month-average")
-            .GetComponent<ui_historic_overview_month>()
-            .Set(this, historicResponses);
+        }       
     }
 
     void Update()
@@ -84,17 +70,73 @@ public class ui_review_historic : UIBase
                 transform.Find("historic-summary").gameObject.SetActive(false);
                 reviewCurrent.SetActive(true);
                 break;
-            
+
             case Mode.Summary:
+            {
                 transform.Find("historic-overview").gameObject.SetActive(false);
                 transform.Find("historic-summary").gameObject.SetActive(true);
                 reviewCurrent.SetActive(false);
+
+                var root = transform.Find("historic-summary").transform;
+                
+
+                    /*
+                     * get all the historic data and rank feedback
+                     * then choose the biggest N items and display
+                     */
+
+                    
+                    if (historicPieChart.Length > 3)
+                    {
+                        //get the first three and scale
+                        for (var i = 0; i < 3; i++)
+                        {
+                            root.Find("average-mouths").transform.Find("mouth_model ("+i+")").GetComponent<ui_mouth_model>().SetMouth((int)historicPieChart[i].Key);
+                            root.Find("average-mouths").transform.Find("percentage (" + i + ")").GetComponent<UnityEngine.UI.Text>().text = historicPieChart[i].Value+"%";
+                        }
+
+                    }
+
+                    var str = "";
+
+                    foreach (var kvp in historicPieChart)
+                    {
+                        str += kvp.Key + " " + kvp.Value + "%" + "\n";
+                    }
+
+                    root.Find("summary_text").GetComponent<UnityEngine.UI.Text>().text = str;                    
+                }
+
+
                 break;
-            
+
             case Mode.Overview:
-                transform.Find("historic-overview").gameObject.SetActive(true);        
+            { 
+                transform.Find("historic-overview").gameObject.SetActive(true);
                 transform.Find("historic-summary").gameObject.SetActive(false);
                 reviewCurrent.SetActive(false);
+
+                {
+                    var i = 0;
+                    foreach (var entry in historicResponses)
+                    {
+                        if (entry.data.Count > 0)
+                        {
+                            transform.Find("historic-overview").Find("historic-overview-month (" + i + ")").gameObject
+                                .SetActive(true);
+                            transform.Find("historic-overview").Find("historic-overview-month (" + i + ")")
+                                .GetComponent<ui_historic_overview_month>()
+                                .Set(this, entry);
+
+                            i++;
+                        }
+                    }
+
+                    transform.Find("historic-overview").Find("historic-overview-month-average")
+                        .GetComponent<ui_historic_overview_month>()
+                        .Set(this, historicPieChart);
+                }
+            }
                 break;
         }
     }

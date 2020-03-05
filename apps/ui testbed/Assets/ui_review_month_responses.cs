@@ -20,16 +20,21 @@ public class ui_review_month_responses : UIBase
 
     private UIBase callingObject;
 
-    private GameObject summaryMouth;
-    
+    private ui_mouth_model summaryMouth;
+
     void Start()
     {
+        /*
         summaryMouth = Instantiate(Resources.Load("prefabs/mouth-model")) as GameObject;
 
         summaryMouth.transform.parent = transform.Find("current-summary");
         var rt = summaryMouth.transform.Find("Canvas").GetComponent<RectTransform>();
         rt.localPosition = new UnityEngine.Vector3(540,960);
         rt.localScale = new UnityEngine.Vector3(10, 10, 1);
+        */
+
+        
+        summaryMouth = transform.Find("current-summary").transform.Find("mouth_model").GetComponent<ui_mouth_model>();        
     }
 
     private UserData.HistoricData data;
@@ -41,7 +46,7 @@ public class ui_review_month_responses : UIBase
         
         currentResponseIndex = 0;
 
-        transform.Find("current-overview").Find("back").gameObject.SetActive(callingObject.name == "ui_review_current");
+        transform.Find("current-overview").Find("back").gameObject.SetActive(callingObject.name != "review_current");
     }
 
     bool writeData;
@@ -119,8 +124,8 @@ public class ui_review_month_responses : UIBase
                 
                 root.Find("feedback-to-user").GetComponent<UnityEngine.UI.Text>().text = userData.GetMonthlyFeedback(data.time);
 
-                summaryMouth.GetComponent<ui_mouth_model>().SetMouth(userData.GetMonthlyFeedbackAsInt(data.time));
-                }
+                summaryMouth.SetMouth(userData.GetMonthlyFeedbackAsInt(data.time));
+            }
                 break;
 
             case Mode.Dimension_Summary:
@@ -137,16 +142,20 @@ public class ui_review_month_responses : UIBase
                 root.Find("item").Find("dimension").GetComponent<UnityEngine.UI.Text>().text = label;
                 root.Find("item").Find("value").GetComponent<UnityEngine.UI.Text>().text = userData.GetQuestionResponse(data.data[currentResponseIndex], label);
 
-                //if review historic - only show feedback
+                    //if review historic - only show feedback
+                root.Find("enter-details").gameObject.SetActive(writeData);
+                root.Find("view-details").gameObject.SetActive(!writeData);
+
+                root.Find("recorded-tab").GetComponent<UnityEngine.UI.Text>().text =
+                    "Recorded " + data.data[currentResponseIndex].date;
 
                 if (writeData == true)
                 {
-                    root.Find("enter-details").gameObject.SetActive(writeData);
+                    
                     root.Find("enter-details").Find("InputField").GetComponent<UnityEngine.UI.InputField>().text = userData.GetQuestionResponseNarrative(data.data[currentResponseIndex], label);
                 }
                 else
-                {
-                    root.Find("view-details").gameObject.SetActive(!writeData);
+                {                
                     root.Find("view-details").Find("Text").GetComponent<UnityEngine.UI.Text>().text = userData.GetQuestionResponseNarrative(data.data[currentResponseIndex], label);
                 }
             }
@@ -156,11 +165,7 @@ public class ui_review_month_responses : UIBase
 
         
     }
-
-    public void OnPageSelected()
-    {
-    }
-
+    
     public void OnNotes(string dimension)
     {
         currentMode = Mode.Dimension_Summary;

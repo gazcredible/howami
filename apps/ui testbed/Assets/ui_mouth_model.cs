@@ -18,10 +18,15 @@ public class ui_mouth_model : MonoBehaviour
 
     public void SetMouth(int level)
     {
-        transform.Find("Canvas").Find("mouth-0").gameObject.SetActive(level == 0);
-        transform.Find("Canvas").Find("mouth-1").gameObject.SetActive(level == 1);
-        transform.Find("Canvas").Find("mouth-2").gameObject.SetActive(level == 2);
-        transform.Find("Canvas").Find("mouth-3").gameObject.SetActive(level == 3);
-        transform.Find("Canvas").Find("mouth-4").gameObject.SetActive(level == 4);
+        if (transform.Find("mouth-0") == null)
+        {
+            return;
+        }
+
+        transform.Find("mouth-0").gameObject.SetActive(level == 0);
+        transform.Find("mouth-1").gameObject.SetActive(level == 1);
+        transform.Find("mouth-2").gameObject.SetActive(level == 2);
+        transform.Find("mouth-3").gameObject.SetActive(level == 3);
+        transform.Find("mouth-4").gameObject.SetActive(level == 4);
     }
 }
