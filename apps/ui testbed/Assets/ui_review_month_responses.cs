@@ -34,7 +34,10 @@ public class ui_review_month_responses : UIBase
         */
 
         
-        summaryMouth = transform.Find("current-summary").transform.Find("mouth_model").GetComponent<ui_mouth_model>();        
+        summaryMouth = transform.Find("current-summary").transform.Find("mouth_model").GetComponent<ui_mouth_model>();
+
+        transform.Find("current-overview").Find("next").gameObject.SetActive(false);
+        transform.Find("current-overview").Find("prev").gameObject.SetActive(false);
     }
 
     private UserData.HistoricData data;

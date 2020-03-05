@@ -17,6 +17,7 @@ public class ui_review_current : ui_review_historic
 
         var rt = reviewCurrent.GetComponent<RectTransform>();
         rt.localScale = new Vector3(1,1,1);
+        reviewCurrent.SetActive(false);
     }
 
     public override void OnPageSelected()

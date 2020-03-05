@@ -7778,7 +7778,7 @@ GameObject:
   - component: {fileID: 1444122161}
   - component: {fileID: 1444122160}
   m_Layer: 5
-  m_Name: Image
+  m_Name: bg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8527,7 +8527,7 @@ GameObject:
   - component: {fileID: 1636256942}
   - component: {fileID: 1636256941}
   m_Layer: 5
-  m_Name: Image
+  m_Name: bg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10270,7 +10270,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1674065155}
-        m_MethodName: OnMainMenu
+        m_MethodName: OnBack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10455,7 +10455,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: close results
+  m_Text: back
 --- !u!222 &1903498117
 CanvasRenderer:
   m_ObjectHideFlags: 0

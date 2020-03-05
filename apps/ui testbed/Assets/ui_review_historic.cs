@@ -42,7 +42,12 @@ public class ui_review_historic : UIBase
     void Awake()
     {
         Init();
+
+        transform.Find("historic-overview").gameObject.SetActive(false);
+        transform.Find("historic-summary").gameObject.SetActive(false);
+        reviewCurrent.SetActive(false);
     }
+
     public override void OnPageSelected()
     {
         currentMode = Mode.Overview;
@@ -58,7 +63,9 @@ public class ui_review_historic : UIBase
         for (i = 0; i < 6; i++)
         {
             transform.Find("historic-overview").Find("historic-overview-month (" + i + ")").gameObject.SetActive(false);
-        }       
+        } 
+        
+        Update();
     }
 
     void Update()
