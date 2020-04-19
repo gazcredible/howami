@@ -123,14 +123,17 @@ public class ui_review_historic : UIBase
                 transform.Find("historic-summary").gameObject.SetActive(false);
                 reviewCurrent.SetActive(false);
 
+                if(historicResponses.Count > 0)
                 {
                     var i = 0;
+                    bool showOverview = false;
+
                     foreach (var entry in historicResponses)
                     {
                         if (entry.data.Count > 0)
                         {
-                            transform.Find("historic-overview").Find("historic-overview-month (" + i + ")").gameObject
-                                .SetActive(true);
+                            showOverview = true;
+                            transform.Find("historic-overview").Find("historic-overview-month (" + i + ")").gameObject.SetActive(true);
                             transform.Find("historic-overview").Find("historic-overview-month (" + i + ")")
                                 .GetComponent<ui_historic_overview_month>()
                                 .Set(this, entry);
@@ -139,9 +142,20 @@ public class ui_review_historic : UIBase
                         }
                     }
 
-                    transform.Find("historic-overview").Find("historic-overview-month-average")
-                        .GetComponent<ui_historic_overview_month>()
-                        .Set(this, historicPieChart);
+                    if (showOverview == true)
+                    {
+                        transform.Find("historic-overview").Find("historic-overview-month-average").gameObject.SetActive(true);
+                        transform.Find("historic-overview").Find("historic-overview-month-average")
+                            .GetComponent<ui_historic_overview_month>()
+                            .Set(this, historicPieChart);
+
+                        transform.Find("historic-overview").Find("no-entries").gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        transform.Find("historic-overview").Find("historic-overview-month-average").gameObject.SetActive(false);
+                        transform.Find("historic-overview").Find("no-entries").gameObject.SetActive(true);
+                    }
                 }
             }
                 break;

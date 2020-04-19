@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 using UnityEngine;
 
-public enum UserResponse { worst=0, med_worst=1,med=2, med_good=3, good=4};
+public enum UserResponse { worst=0, med_worst=1,med=2, med_good=3, good=4,unselected=-1};
 
 [Serializable]
 public class UserRecord : IComparable<UserRecord>
@@ -107,8 +107,9 @@ public class UserData
 
         var date = new DateTime(2019, 1, 1, 8, 0, 0);
 
+        data = new Dictionary<DateTime, UserRecord>();
 
-        while( date < DateTime.Now)
+        while ( date < DateTime.Now)
         {                 
             var record = new UserRecord(date);
 
@@ -158,7 +159,7 @@ public class UserData
           new HowamiQuestion("How am I with the demands of life:", "In the last month, how demanding has my work and personal life been?"),
           new HowamiQuestion("How am I with the support I receive:", "In the last month, how much support have I received in work and personal life?"),
           new HowamiQuestion("How am I with my relationships:", "In the last month, have the relationships I have at work been positive?"),
-          new HowamiQuestion("How am I with the control I have:", "In the last month, do I feel I have had enough sat in how I do my work?"),
+          new HowamiQuestion("How am I with the control I have:", "In the last month, do I feel I have had enough say in how I do my work?"),
           new HowamiQuestion("How am I with the change:", "In the last month, have any changes in my work been well communicated with me?"),
     };
 
@@ -179,6 +180,18 @@ public class UserData
         return dimensionLabels[i];
     }
 
+    public Dimensions GetDimensionEnum(int i)
+    {
+        if (i == 0) return Dimensions.Role;
+        if (i == 1) return Dimensions.Demands;
+        if (i == 2) return Dimensions.Support;
+        if (i == 3) return Dimensions.Relationships;
+        if (i == 4) return Dimensions.Control;
+        if (i == 5) return Dimensions.Change;
+
+        throw new Exception("out of range");
+    }
+
     public String[] monthlyFeedback =
     {
         //0 - worst
@@ -195,16 +208,20 @@ public class UserData
 
     public Dictionary<Dimensions, String[]> dimension_performance_lookup = new Dictionary<Dimensions, String[]>()
     {
-        {Dimensions.Role,            new String[]{"role_worst", "role_med_worst", "role_med", "role_med_good", "role_good" } },
-        {Dimensions.Demands,         new String[]{"demands_worst", "demands_med_worst", "demands_med", "demands_med_good", "demands_good" } },
-        {Dimensions.Support,         new String[]{"support_worst", "support_med_worst", "support_med", "support_med_good", "support_good" } },
-        {Dimensions.Relationships,   new String[]{"rel_worst", "rel_med_worst", "rel_med", "rel_med_good", "rel_good" } },
-        {Dimensions.Control,         new String[]{"control_worst", "control_med_worst", "control_med", "control_med_good", "control_good" } },
-        {Dimensions.Change,          new String[]{"change_worst", "change_med_worst", "change_med", "change_med_good", "change_good" } }, 
+        {Dimensions.Role,            new String[]{"Completely Unclear","Somewhat Clear", "Fairly Clear", "Clear", "Very Clear"} },
+        {Dimensions.Demands,         new String[]{"Poor", "Demanding", "Ok","Good", "Very Good" } },
+        {Dimensions.Support,         new String[]{"None", "Not enough", "Ok", "Good", "Very Good" } },
+        {Dimensions.Relationships,   new String[]{"Very Poor", "Poor","Ok","Good","Very Good" } },
+        {Dimensions.Control,         new String[]{"None", "Some","Ok","Good","Very Good" } },
+        {Dimensions.Change,          new String[]{"No","Limited","Ok","Good","Very Good" } }
      };
-    
-    public string GetQuestionResponse(UserRecord record, Dimensions dimensionLabel)
+
+    public string GetQuestionResponse(Dimensions dimensionLabel, UserResponse response)
     {
+        return dimension_performance_lookup[dimensionLabel][(int)response];
+    }
+    public string GetQuestionResponse(UserRecord record, Dimensions dimensionLabel)
+    {        
         return dimension_performance_lookup[dimensionLabel][(int)(record.responses[dimensionLabel].response)];
     }
 
@@ -318,7 +335,14 @@ public class UserData
 
         for (var i = 0; i < percent.Length; i++)
         {
-            percent[i] = new KeyValuePair<UserResponse, int>( (UserResponse) i,(instances[i] * 100) / sum);
+            if (sum > 0)
+            {
+                percent[i] = new KeyValuePair<UserResponse, int>((UserResponse)i, (instances[i] * 100) / sum);
+            }
+            else
+            {
+                percent[i] = new KeyValuePair<UserResponse, int>((UserResponse)i, 0);
+            }
         }
 
         Array.Sort(percent, new Comparison<KeyValuePair<UserResponse, int>>(
@@ -491,7 +515,7 @@ public class UserData
 
     public void Load()
     {
-        data = null;
+        data = new Dictionary<DateTime, UserRecord>();
 
         var filename = Application.persistentDataPath + "/playerInfo.dat";
 
@@ -514,7 +538,6 @@ public class UserData
             }
 
             stream.Close();
-        }
-
+        }        
     }
 };
