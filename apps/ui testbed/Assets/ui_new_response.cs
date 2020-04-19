@@ -148,6 +148,9 @@ public class ui_new_response : UIBase
 
             var pos = Input.mousePosition;
 
+            cq.transform.Find("debug_mouse").gameObject.SetActive(false);
+            cq.transform.Find("debug_text").gameObject.SetActive(false);
+
             cq.transform.Find("debug_mouse").GetComponent<RectTransform>().SetPositionAndRotation(new Vector3(pos.x, pos.y, 0), Quaternion.Euler(0, 0, 0));
 
             pos.y = Screen.height - pos.y;

@@ -101,6 +101,8 @@ public class ui_review_month_responses : UIBase
 
                     root.Find("prev").gameObject.SetActive(currentResponseIndex != 0);
                     root.Find("next").gameObject.SetActive(currentResponseIndex + 1 < data.data.Count);
+
+                    root.Find("results").gameObject.SetActive(true);
                 }
                 else
                 {
@@ -114,7 +116,9 @@ public class ui_review_month_responses : UIBase
                     root.Find("record").GetComponent<UnityEngine.UI.Text>().text = "No Responses for current month";
                     root.Find("prev").gameObject.SetActive(false);
                     root.Find("next").gameObject.SetActive(false);
+                    root.Find("results").gameObject.SetActive(false);
                 }
+
 
             }
                 break;
