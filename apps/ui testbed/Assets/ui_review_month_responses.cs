@@ -63,6 +63,8 @@ public class ui_review_month_responses : UIBase
     void Update()
     {
         var userData = GameObject.Find("Canvas").GetComponent<UITestbed>().userData;
+
+
         
         switch (this.currentMode)
         {
@@ -73,6 +75,8 @@ public class ui_review_month_responses : UIBase
                 transform.Find("current-summary").gameObject.SetActive(false);
 
                 var root = transform.Find("current-overview");
+
+                root.Find("results").gameObject.SetActive(false);
 
                 if ((data.data != null) && (data.data.Count > 0))
                 {
@@ -102,7 +106,9 @@ public class ui_review_month_responses : UIBase
                     root.Find("prev").gameObject.SetActive(currentResponseIndex != 0);
                     root.Find("next").gameObject.SetActive(currentResponseIndex + 1 < data.data.Count);
 
-                    root.Find("results").gameObject.SetActive(true);
+                    //GARETH disable
+                    //root.Find("results").gameObject.SetActive(true);
+                    root.Find("results").gameObject.SetActive(false);
                 }
                 else
                 {
