@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,15 @@ public class UITestbed : MonoBehaviour
     public String mode;
 
     public UserData userData;
+    public XMLFile textDB;
+
+    public String[] modes = new string[]
+    {
+        "new_response",
+        "review_current",
+        "review_historic",
+        "support",
+    };
 
     void Start()
     {
@@ -33,6 +43,75 @@ public class UITestbed : MonoBehaviour
         //userData.Init();
         //userData.Save();
         userData.Load();
+        
+        LoadText();
+
+
+    }
+
+    public void LoadText()
+    {
+        Stream dataStream = null;
+
+        var resourceName = "text";
+        var ext = "xml";
+
+        if (UnityEngine.Application.isEditor == true)
+        {
+            dataStream = new MemoryStream();
+
+            var filename = UnityEngine.Application.dataPath + @"/Resources/" + resourceName +"." +ext;
+
+            try
+            {
+                var stream = File.OpenRead(filename);
+                dataStream.SetLength(stream.Length);
+                stream.Read((dataStream as MemoryStream).GetBuffer(), 0, (int)stream.Length);
+                stream.Close();
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogWarning("File not found: " + filename + " " + ex.ToString());
+            }                    
+        }
+        else
+        {
+            UnityEngine.TextAsset asset;
+            asset = (UnityEngine.TextAsset)UnityEngine.Resources.Load(resourceName);
+
+            dataStream = new MemoryStream(asset.bytes);
+        }
+        
+        textDB = new XMLLoadFile(dataStream);
+
+        foreach (var mode in modes)
+        {
+            switch (mode)
+            {
+                case "splash":
+                    break;
+
+                case "new_response":
+                    transform.Find("ui_background").Find(mode).GetComponent<ui_new_response>().LoadText();
+                    break;
+
+                case "review_current":
+                    transform.Find("ui_background").Find(mode).GetComponent<ui_review_current>().LoadText();
+                    break;
+
+                case "review_historic":
+                    transform.Find("ui_background").Find(mode).GetComponent<ui_review_historic>().LoadText();
+                    break;
+
+                case "support":
+                    transform.Find("ui_background").Find(mode).GetComponent<ui_support>().LoadText();
+                    break;
+
+                default:
+                    Debug.LogError(mode + " not supported");
+                    return;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -107,14 +186,3 @@ public class UITestbed : MonoBehaviour
         }      
     }
 }
-
-/*
-Questions:
-Role: In the last month, have been clear about your role in the job?
-Demand: In the last month, in your work and personal life, how demanding has your situation been?
-Support: In the last month, how much support have you received in your work and personal life?
-Relationships: Have the relationships at work been positive?
-Control: in the last month, do you feel you have had enough say in how you do your work?
-Change: In the last month, have any changes to your work been well communicated to you?
- 
- */

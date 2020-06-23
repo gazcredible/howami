@@ -13,4 +13,9 @@ public class UIBase : MonoBehaviour
     public virtual void OnPageSelected()
     {
     }
+
+    public virtual void LoadText()
+    {
+        
+    }
 }
