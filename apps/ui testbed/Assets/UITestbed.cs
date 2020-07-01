@@ -56,6 +56,8 @@ public class UITestbed : MonoBehaviour
         var resourceName = "text";
         var ext = "xml";
 
+        bool redirect_loading = true;
+
         if (UnityEngine.Application.isEditor == true)
         {
             dataStream = new MemoryStream();
@@ -76,10 +78,35 @@ public class UITestbed : MonoBehaviour
         }
         else
         {
-            UnityEngine.TextAsset asset;
-            asset = (UnityEngine.TextAsset)UnityEngine.Resources.Load(resourceName);
+            if (redirect_loading == true)
+            {
+                dataStream = new MemoryStream();
 
-            dataStream = new MemoryStream(asset.bytes);
+                
+
+                var filename = Application.dataPath+"/../"+resourceName + "." + ext;
+
+                UnityEngine.Debug.LogWarning(filename);
+
+                try
+                {
+                    var stream = File.OpenRead(filename);
+                    dataStream.SetLength(stream.Length);
+                    stream.Read((dataStream as MemoryStream).GetBuffer(), 0, (int)stream.Length);
+                    stream.Close();
+                }
+                catch (System.Exception ex)
+                {
+                    UnityEngine.Debug.LogWarning("File not found: " + filename + " " + ex.ToString());
+                }
+            }
+            else
+            {
+                UnityEngine.TextAsset asset;
+                asset = (UnityEngine.TextAsset)UnityEngine.Resources.Load(resourceName);
+
+                dataStream = new MemoryStream(asset.bytes);
+            }
         }
         
         textDB = new XMLLoadFile(dataStream);
@@ -117,6 +144,11 @@ public class UITestbed : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(UnityEngine.Input.GetKeyDown(KeyCode.L) == true)
+        {
+            LoadText();
+        }
+
         switch(mode)
         {
             case "splash":
