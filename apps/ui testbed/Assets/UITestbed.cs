@@ -56,7 +56,7 @@ public class UITestbed : MonoBehaviour
         var resourceName = "text";
         var ext = "xml";
 
-        bool redirect_loading = true;
+        bool redirect_loading = false;
 
         if (UnityEngine.Application.isEditor == true)
         {
