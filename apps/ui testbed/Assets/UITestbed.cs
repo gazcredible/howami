@@ -29,15 +29,16 @@ public class UITestbed : MonoBehaviour
     void Start()
     {
         hamburgerMenuActive = false;
-        mode = "splash";
+        mode = "video_screen";
 
-        transform.Find("ui_background").Find("splash").gameObject.SetActive(true);
+        transform.Find("ui_background").Find(mode).gameObject.SetActive(true);
+        transform.Find("ui_background").Find("splash").gameObject.SetActive(false);
         transform.Find("ui_background").Find("new_response").gameObject.SetActive(false);
         transform.Find("ui_background").Find("review_current").gameObject.SetActive(false);
         transform.Find("ui_background").Find("review_historic").gameObject.SetActive(false);
         transform.Find("ui_background").Find("support").gameObject.SetActive(false);
 
-        transform.Find("ui_hamburger").gameObject.SetActive(true);
+        transform.Find("ui_hamburger").gameObject.SetActive(false);
 
         userData = new UserData();
         //userData.Init();
@@ -115,6 +116,9 @@ public class UITestbed : MonoBehaviour
         {
             switch (mode)
             {
+                case "video_screen":
+                    break;
+                
                 case "splash":
                     break;
 
@@ -151,6 +155,9 @@ public class UITestbed : MonoBehaviour
 
         switch(mode)
         {
+            case "video_screen":
+                break;
+
             case "splash":
                 break;
 
@@ -192,6 +199,9 @@ public class UITestbed : MonoBehaviour
             //on new page
             switch (mode)
             {
+                case "video_screen":
+                    break;
+
                 case "splash":
                     break;
 

@@ -24,3 +24,21 @@ apps/MC Testbed/Test00/bin/
 apps/MC Testbed/Test00/obj/
 
 apps/ui testbed/.idea/
+
+apps/cordova-01/.idea/
+
+apps/cordova-01/
+
+apps/video player testbed/Library/
+
+apps/video player testbed/Logs/
+
+apps/video player testbed/Packages/
+
+apps/video player testbed/ProjectSettings/
+
+apps/ui testbed/Assembly-CSharp-Editor.csproj
+
+apps/ui testbed/Assembly-CSharp.csproj
+
+apps/ui testbed/ui testbed.sln
