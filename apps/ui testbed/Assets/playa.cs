@@ -12,20 +12,33 @@ public class playa : MonoBehaviour
     public int width = 720;
     public int height = 1280;
     public int skipFrames = 0;
+
+    private VideoPlayer vp;
     
     void  Start()
     {
         rt = new RenderTexture(width, height, 16, RenderTextureFormat.ARGB32);
         rt.Create();
 
-        transform.Find("Video Player").GetComponent<VideoPlayer>().targetTexture = rt;
+        vp = transform.Find("Video Player").GetComponent<VideoPlayer>(); 
+
+        vp.targetTexture = rt;
         transform.Find("video_screen").GetComponent<RawImage>().texture = rt;
         
-        transform.Find("Video Player").GetComponent<VideoPlayer>().frame = skipFrames;
+        vp.frame = skipFrames;
     }
 
     // Update is called once per frame
     void Update()
-    {        
+    {     
+        //Debug.LogWarning(vp.frame.ToString() +'/'+ vp.frameCount.ToString() + " "+vp.isPlaying.ToString());
+    }
+
+    public bool isVideoDone
+    {
+        get
+        {
+            return ( (int)vp.frame >= (int)vp.frameCount);
+        }
     }
 }

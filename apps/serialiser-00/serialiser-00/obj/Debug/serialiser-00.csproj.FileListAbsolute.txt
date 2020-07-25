@@ -1,0 +1,6 @@
+/Users/gareth/Documents/dev/howami/apps/serialiser-00/serialiser-00/bin/Debug/serialiser_00.exe
+/Users/gareth/Documents/dev/howami/apps/serialiser-00/serialiser-00/bin/Debug/serialiser_00.pdb
+/Users/gareth/Documents/dev/howami/apps/serialiser-00/serialiser-00/obj/Debug/serialiser-00.csprojAssemblyReference.cache
+/Users/gareth/Documents/dev/howami/apps/serialiser-00/serialiser-00/obj/Debug/serialiser-00.csproj.CoreCompileInputs.cache
+/Users/gareth/Documents/dev/howami/apps/serialiser-00/serialiser-00/obj/Debug/serialiser_00.exe
+/Users/gareth/Documents/dev/howami/apps/serialiser-00/serialiser-00/obj/Debug/serialiser_00.pdb

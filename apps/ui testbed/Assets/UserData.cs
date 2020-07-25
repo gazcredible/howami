@@ -95,9 +95,14 @@ public class UserData
 
     public Dictionary<DateTime, UserRecord> data;
 
+    Int32 major = 0;
+    Int32 minor = 0;
+    public bool video_watched = false;
+
+    private readonly Int32 magic_number = 0x11223344;
+    
     public UserData()
     {
-
         data = new Dictionary<DateTime, UserRecord>();
     }
 
@@ -468,11 +473,15 @@ public class UserData
             }
 
             var file = File.Create(filename);
-
+            
             try
             {
                 BinaryFormatter bf = new BinaryFormatter();
-                bf.Serialize(file, data);
+                bf.Serialize(file,this.magic_number);
+                bf.Serialize(file,this.major);
+                bf.Serialize(file,this.minor);
+                bf.Serialize(file,this.video_watched);
+                bf.Serialize(file, this.data);
             }
             catch (Exception ex)
             {
@@ -495,7 +504,7 @@ public class UserData
 
             try
             {
-                foreach (var entry in data)
+                foreach (var entry in this.data)
                 {
                     writer.Write(entry.Key);
                     writer.Write(" ");
@@ -503,9 +512,9 @@ public class UserData
                     writer.Write(writer.NewLine);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Debug.LogWarning("PersistentData - can't write to file:" + filename);
+                Debug.LogWarning("PersistentData - can't write to file:" + filename + " "+ ex.ToString());
             }
 
             writer.Close();
@@ -515,29 +524,72 @@ public class UserData
 
     public void Load()
     {
-        data = new Dictionary<DateTime, UserRecord>();
+        this.data = new Dictionary<DateTime, UserRecord>();
 
         var filename = Application.persistentDataPath + "/playerInfo.dat";
 
         if (File.Exists(filename) == true)
         {
             var stream = File.Open(filename, FileMode.Open);
+            BinaryFormatter bf = new BinaryFormatter();
+            //try and read a version int
+            //if we can't it's an old data format
+
+            major = 0;
+            minor = 0;
+
             try
             {
-                BinaryFormatter bf = new BinaryFormatter();
-                data = bf.Deserialize(stream) as Dictionary<DateTime, UserRecord>;
+                var magic = (Int32) bf.Deserialize(stream);
 
-                Debug.LogWarning("PersistentData - loaded:" + filename);
+                if (magic == this.magic_number)
+                {
+                    Debug.LogWarning("PersistentData - current format");
+                    major = (Int32) bf.Deserialize(stream);
+                    major = (Int32) bf.Deserialize(stream);
+                    video_watched = (bool) bf.Deserialize(stream);
+
+                    this.data = bf.Deserialize(stream) as Dictionary<DateTime, UserRecord>;
+                    stream.Close(); 
+                }
+                else
+                {
+                    throw new System.Exception("old format");
+                }
             }
             catch (Exception ex)
             {
-                Debug.LogWarning("PersistentData - is out of date");
-                data = null;
+                //old data format!
+                Debug.LogWarning("PersistentData - old format");
+                
+                try
+                {
+                    this.video_watched = false;
+                    stream.Seek(0, SeekOrigin.Begin);
+                    this.data = bf.Deserialize(stream) as Dictionary<DateTime, UserRecord>;
+                    stream.Close();
+                    
+                    Debug.LogWarning("PersistentData - old format LOADED");
+                }
+                catch (Exception e)
+                {
+                    this.data = new Dictionary<DateTime, UserRecord>();
+                    
+                    stream.Close();
+                    this.video_watched = false;
 
-                Debug.LogWarning("PersistentData - can't load:" + filename +"\n"+ex);
+                    Debug.LogWarning("PersistentData - old format FAILED TO LOAD");
+                }
             }
+        }
 
-            stream.Close();
-        }        
+        if (this.data == null)
+        {
+            this.data = new Dictionary<DateTime, UserRecord>();
+        }
+
+        //this.video_watched = false;
+        
+        Debug.LogWarning("Video watched: "+this.video_watched);
     }
 };

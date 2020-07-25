@@ -14,6 +14,7 @@ public class ui_support : UIBase
         OnPageSelected();
     }
     
+    
     public override void LoadText()
     {
         support_text_entries = new List<String>();

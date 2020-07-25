@@ -253,5 +253,6 @@ public class ui_new_response : UIBase
         }
 
         userData.data.Add(record.date,record);
+        userData.Save();
     }
 }

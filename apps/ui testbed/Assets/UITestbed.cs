@@ -18,6 +18,8 @@ public class UITestbed : MonoBehaviour
     public UserData userData;
     public XMLFile textDB;
 
+    public bool startWithVideo;
+
     public String[] modes = new string[]
     {
         "new_response",
@@ -29,21 +31,33 @@ public class UITestbed : MonoBehaviour
     void Start()
     {
         hamburgerMenuActive = false;
-        mode = "video_screen";
+        
+        userData = new UserData();
+        userData.Load();
+        
 
-        transform.Find("ui_background").Find(mode).gameObject.SetActive(true);
+        transform.Find("ui_background").Find("video_screen").gameObject.SetActive(false);
         transform.Find("ui_background").Find("splash").gameObject.SetActive(false);
         transform.Find("ui_background").Find("new_response").gameObject.SetActive(false);
         transform.Find("ui_background").Find("review_current").gameObject.SetActive(false);
         transform.Find("ui_background").Find("review_historic").gameObject.SetActive(false);
         transform.Find("ui_background").Find("support").gameObject.SetActive(false);
-
         transform.Find("ui_hamburger").gameObject.SetActive(false);
+        
+        hamburgerMenuActive = false;
 
-        userData = new UserData();
-        //userData.Init();
-        //userData.Save();
-        userData.Load();
+        if (userData.video_watched == false)
+        {
+            mode = "video_screen";
+        }
+        else
+        {
+            mode = "splash";
+            transform.Find("ui_hamburger").gameObject.SetActive(true);
+        }
+
+        transform.Find("ui_background").Find(mode).gameObject.SetActive(true);
+        
         
         LoadText();
 
@@ -187,7 +201,7 @@ public class UITestbed : MonoBehaviour
     public void OnHamburgerSelect(String option)
     {
        // if(option != mode)
-        {                        
+       {                        
             transform.Find("ui_background").Find(mode).gameObject.SetActive(false);
 
             mode = option;
@@ -203,6 +217,7 @@ public class UITestbed : MonoBehaviour
                     break;
 
                 case "splash":
+                    transform.Find("ui_hamburger").gameObject.SetActive(true);
                     break;
 
                 case "new_response":
