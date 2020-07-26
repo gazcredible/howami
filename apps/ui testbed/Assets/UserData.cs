@@ -588,7 +588,7 @@ public class UserData
             this.data = new Dictionary<DateTime, UserRecord>();
         }
 
-        //this.video_watched = false;
+        this.video_watched = false;
         
         Debug.LogWarning("Video watched: "+this.video_watched);
     }

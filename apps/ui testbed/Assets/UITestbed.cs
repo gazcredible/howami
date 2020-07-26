@@ -30,6 +30,8 @@ public class UITestbed : MonoBehaviour
 
     void Start()
     {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
         hamburgerMenuActive = false;
         
         userData = new UserData();
@@ -218,6 +220,7 @@ public class UITestbed : MonoBehaviour
 
                 case "splash":
                     transform.Find("ui_hamburger").gameObject.SetActive(true);
+                    Screen.sleepTimeout = SleepTimeout.SystemSetting;
                     break;
 
                 case "new_response":

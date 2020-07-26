@@ -13,7 +13,7 @@ public class playa : MonoBehaviour
     public int height = 1280;
     public int skipFrames = 0;
 
-    private VideoPlayer vp;
+    public VideoPlayer vp;
     
     void  Start()
     {
@@ -38,7 +38,7 @@ public class playa : MonoBehaviour
     {
         get
         {
-            return ( (int)vp.frame >= (int)vp.frameCount);
+            return (vp.frame > 10) && (vp.isPlaying == false);
         }
     }
 }
