@@ -588,8 +588,11 @@ public class UserData
             this.data = new Dictionary<DateTime, UserRecord>();
         }
 
-        //this.video_watched = false;
-        
+        if (GameObject.Find("Canvas").GetComponent<UITestbed>().startWithVideo == true)
+        {
+            this.video_watched = false;
+        }
+
         Debug.LogWarning("Video watched: "+this.video_watched);
     }
 };

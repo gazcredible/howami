@@ -3,6 +3,8 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.Video;
 
 public class UITestbed : MonoBehaviour
 {
@@ -10,16 +12,25 @@ public class UITestbed : MonoBehaviour
 
     public Color textHighlight;
     public Color textNormal;
-    public Color mouthNoirmal;
+    [FormerlySerializedAs("mouthNoirmal")] public Color mouthNormal;
 
+    [HideInInspector]
     public bool hamburgerMenuActive;
+    [HideInInspector]
     public String mode;
 
+    [HideInInspector]
     public UserData userData;
     public XMLFile textDB;
 
     public bool startWithVideo;
+    public bool playMyLovelyVideo;
+    public VideoClip properVideo;
+    public VideoClip testVideo;
 
+    public string version_data = "version 0.0.1 : 27/07/2020";
+    
+    [HideInInspector]
     public String[] modes = new string[]
     {
         "new_response",
@@ -45,6 +56,8 @@ public class UITestbed : MonoBehaviour
         transform.Find("ui_background").Find("review_historic").gameObject.SetActive(false);
         transform.Find("ui_background").Find("support").gameObject.SetActive(false);
         transform.Find("ui_hamburger").gameObject.SetActive(false);
+
+        transform.Find("ui_hamburger").Find("version").GetComponent<UnityEngine.UI.Text>().text = version_data;
         
         hamburgerMenuActive = false;
 

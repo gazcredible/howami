@@ -26,6 +26,22 @@ public class playa : MonoBehaviour
         transform.Find("video_screen").GetComponent<RawImage>().texture = rt;
         
         vp.frame = skipFrames;
+        
+        var control = GameObject.Find("Canvas").GetComponent<UITestbed>();
+
+        if (control.playMyLovelyVideo == true)
+        {
+            vp.clip = control.testVideo;
+            transform.localScale = new Vector3(2,2,1);
+            transform.localEulerAngles = new Vector3(0,0,-90);
+        }
+        else
+        {
+            vp.clip = control.properVideo;
+            transform.localScale = new Vector3(1,1,1);
+            transform.localEulerAngles = new Vector3(0,0,0);
+        }
+
     }
 
     // Update is called once per frame
