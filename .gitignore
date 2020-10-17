@@ -42,3 +42,25 @@ apps/ui testbed/Assembly-CSharp-Editor.csproj
 apps/ui testbed/Assembly-CSharp.csproj
 
 apps/ui testbed/ui testbed.sln
+
+apps/howami app/Library/
+
+apps/howami app/builds/
+
+apps/howami app/.idea/
+
+apps/howami app/Logs/
+
+apps/howami app/obj/
+
+apps/howami app/Temp/
+
+*.csproj
+
+apps/howami app/howami app.sln
+
+apps/howami app/ui testbed.sln
+
+apps/howami app/UpgradeLog.htm
+
+apps/howami app/ui testbed.sln.DotSettings.user
