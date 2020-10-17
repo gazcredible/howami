@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>HowAmI.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>armv7</string>
+				<string>arm64</string>
+			</array>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>30E5F012118347893A2F65B3DA539B3927EF52C7</string>
+				<key>dateExpires</key>
+				<string>27/06/2021</string>
+				<key>type</key>
+				<string>Apple Development</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>E7WUVUWTET.com.FalmouthUniversity.HowAmI</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>E7WUVUWTET</string>
+				<key>get-task-allow</key>
+				<true/>
+				<key>keychain-access-groups</key>
+				<array>
+					<string>E7WUVUWTET.com.FalmouthUniversity.HowAmI</string>
+				</array>
+			</dict>
+			<key>name</key>
+			<string>HowAmI.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>44e4022e-7024-481d-8bf8-7753a59a035b</string>
+				<key>name</key>
+				<string>iOS Team Provisioning Profile: *</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>E7WUVUWTET</string>
+				<key>name</key>
+				<string>Gareth Lewis</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
