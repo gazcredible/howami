@@ -6596,7 +6596,7 @@ MonoBehaviour:
   playMyLovelyVideo: 0
   properVideo: {fileID: 32900000, guid: 33927b0ece39549b9960eaf7b9368bee, type: 3}
   testVideo: {fileID: 32900000, guid: bea5287f73c8b4e4a9e27bc6ba518732, type: 3}
-  version_data: 'version 0.0.1 : 27/07/2020'
+  version_data: 'version 1.0.1 : 01/11/2020'
   modes:
   - new_response
   - review_current
